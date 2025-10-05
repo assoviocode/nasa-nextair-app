@@ -1,0 +1,91 @@
+<div class="map-wrapper">
+  <!-- 🔍 Painel superior -->
+  <div class="map-controls shadow">
+    <h2 class="fw-bold">🌍 NextAir</h2>
+
+    <div class="input-group">
+      <!-- 📅 Campo de Data -->
+      <input
+        type="date"
+        class="form-control w-auto"
+        style="max-width: 160px"
+        value="2025-10-05"
+        aria-label="Select date"
+      />
+
+      <!-- 🏙️ Campo de Cidade -->
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Enter the city name..."
+        [(ngModel)]="cidadePesquisada"
+        aria-label="City name"
+      />
+
+      <!-- 🔍 Botão de busca -->
+      <button
+        class="btn btn-primary"
+        (click)="buscarCidade()"
+        [disabled]="loading"
+        aria-label="Search city"
+      >
+        {{ loading ? "Loading..." : "Search" }}
+      </button>
+    </div>
+  </div>
+
+  <!-- 🗺️ Mapa -->
+  <div id="map" aria-label="Air quality map"></div>
+
+  <!-- 🌈 Legenda (canto inferior direito) -->
+  <div class="aqi-legend" aria-live="polite">
+    <h4>Air Quality (AQI)</h4>
+    <ul>
+      <li><span style="background-color: #009966"></span>Good (0–50)</li>
+      <li><span style="background-color: #ffde33"></span>Moderate (51–100)</li>
+      <li>
+        <span style="background-color: #ff9933"></span>
+        Unhealthy for Sensitive Groups (101–150)
+      </li>
+      <li>
+        <span style="background-color: #cc0033"></span>Unhealthy (151–200)
+      </li>
+      <li>
+        <span style="background-color: #660099"></span>Very Unhealthy (201–300)
+      </li>
+      <li><span style="background-color: #7e0023"></span>Hazardous (301+)</li>
+    </ul>
+  </div>
+
+  <!-- 🧭 Filtro lateral (colapsável) -->
+  <div class="aqi-filter" role="region" aria-label="Filter panel">
+    <!-- <div
+      class="aqi-header"
+      (click)="showFilters = !showFilters"
+      [attr.aria-expanded]="showFilters"
+      aria-controls="aqi-filter-content"
+    >
+      <h4>Poluente</h4>
+      <i
+        class="fa-solid fa-chevron-down chevron"
+        [ngClass]="{ rotated: showFilters }"
+        aria-hidden="true"
+      ></i>
+    </div> -->
+
+    <div class="aqi-content" *ngIf="showFilters" id="aqi-filter-content">
+      <ul class="list-unstyled mb-0">
+        <li>
+          <button
+            type="button"
+            class="btn btn-subscribe w-100"
+            (click)="abrirRegisterModal()"
+          >
+            <i class="fa-solid fa-bell me-2"></i>
+            Sign Up for Alerts
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

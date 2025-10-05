@@ -1,0 +1,53 @@
+<div class="modal-header custom-header">
+  <h5 class="modal-title d-flex align-items-center gap-2">
+    <i class="fa-solid fa-pen-to-square"></i>
+    Sign up
+  </h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+
+<form
+  [formGroup]="form"
+  class="d-flex flex-column gap-3"
+  (submit)="this.save()"
+>
+  <div class="modal-body custom-body">
+    <div class="input-wrapper">
+      <i class="fa-solid fa-phone input-icon"></i>
+      <input
+        type="text"
+        id="phone"
+        formControlName="phone"
+        class="form-control modern-input"
+        placeholder="Enter the phone number"
+        maxlength="15"
+        (input)="onPhoneInput($event)"
+      />
+    </div>
+
+    <div class="input-wrapper mt-2">
+      <i class="fa-solid fa-user input-icon"></i>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="form-control modern-input"
+        placeholder="Enter the name"
+      />
+    </div>
+  </div>
+
+  <div class="modal-footer custom-footer">
+    <button type="button" class="btn btn-cancel" (click)="close()">
+      <i class="fa-solid fa-xmark me-1"></i> Cancel
+    </button>
+    <button type="submit" class="btn btn-save" [disabled]="form.invalid">
+      <i class="fa-solid fa-check me-1"></i> Save
+    </button>
+  </div>
+</form>

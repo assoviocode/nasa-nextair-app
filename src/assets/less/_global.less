@@ -1,0 +1,427 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.map-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 🌈 Legenda no canto inferior direito */
+.aqi-legend {
+  position: absolute;
+  bottom: 20px; // 🔹 sobe um pouco pra respirar
+  right: 10px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  padding: 50px 28px; // 🔹 aumenta o espaço interno
+  font-family: "Poppins", sans-serif;
+  z-index: 999;
+  min-width: 220px; // 🔹 garante boa largura
+
+  h4 {
+    font-size: 18px; // 🔹 título maior
+    margin: 0 0 12px 0;
+    text-align: center;
+    color: #222;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      font-size: 15px; // 🔹 texto mais legível
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+
+      span {
+        width: 22px; // 🔹 caixas de cor maiores
+        height: 22px;
+        border-radius: 6px;
+        margin-right: 10px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+.aqi-filter {
+  position: absolute;
+  bottom: 10px;
+  left: 0px;
+  // background: #fff;
+  // border-radius: 8px;
+  // box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  width: 260px;
+  z-index: 999;
+  font-family: "Poppins", sans-serif;
+  padding: 10px 14px;
+
+  .aqi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+
+    h4 {
+      font-size: 15px;
+      margin: 0;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .chevron {
+      transition: transform 0.3s ease;
+      color: #2785c2;
+      font-size: 14px;
+      &.rotated {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .aqi-content {
+    padding: 8px 0;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #333;
+
+        label {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        input[type="checkbox"] {
+          width: 16px;
+          height: 16px;
+          accent-color: #2785c2;
+        }
+
+        strong {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+/* 🔹 versão recolhida */
+.aqi-filter.collapsed {
+  width: 60px;
+  .aqi-content {
+    display: none;
+  }
+  .aqi-header {
+    justify-content: center;
+  }
+}
+
+/* 🔍 Campo de busca flutuante */
+.map-controls {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 6px;
+
+    .form-control {
+      width: 250px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+    }
+
+    .btn {
+      background-color: #1a73e8;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+
+      &:hover {
+        background-color: #1669c1;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.aqi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 8px 0;
+
+  h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .chevron {
+    font-size: 1.1rem;
+    color: #333;
+    transition: transform 0.3s ease, color 0.2s ease;
+
+    &.rotated {
+      transform: rotate(180deg); // 🔁 seta vira pra cima
+    }
+
+    &:hover {
+      color: #007bff; // 💙 só um charme no hover
+    }
+  }
+}
+
+.gmnoprint.gm-bundled-control {
+  display: none !important;
+}
+
+.modal-header {
+  background-color: #2785c2;
+  color: white;
+  border-bottom: none;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+//////////////////////////// MODAL
+
+/* Cabeçalho */
+.custom-header {
+  background: linear-gradient(90deg, #2785c2, #1d6ea0);
+  color: #fff;
+  border: none; /* remove qualquer linha branca entre header e body */
+  font-weight: 600;
+  border-radius: 0;
+  padding: 15px 20px;
+  box-shadow: none; /* sem sombra interna */
+
+  .modal-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+
+    i {
+      color: #fff;
+    }
+  }
+
+  .btn-close {
+    filter: invert(1) brightness(200%);
+    opacity: 0.9;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/* Corpo */
+.custom-body {
+  background-color: #f8fafc;
+  padding: 22px 28px;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Inputs */
+.input-wrapper {
+  position: relative;
+
+  .input-icon {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    color: #2785c2;
+    font-size: 1rem;
+    pointer-events: none;
+  }
+
+  .modern-input {
+    border-radius: 40px;
+    padding-left: 40px;
+    border: 1px solid #d1d5db;
+    transition: all 0.25s ease;
+    font-size: 0.95rem;
+    height: 42px;
+    background-color: #fff;
+
+    &:focus {
+      border-color: #2785c2;
+      box-shadow: 0 0 0 0.25rem rgba(39, 133, 194, 0.2);
+    }
+  }
+}
+
+/* Rodapé */
+.custom-footer {
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background-color: #f8fafc;
+  padding: 12px 18px;
+  border-radius: 0 0 12px 12px;
+
+  .btn-cancel {
+    background: #ef4444; /* 🔴 vermelho suave */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+
+    &:hover {
+      background: #dc2626; /* tom mais escuro no hover */
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+    }
+  }
+
+  .btn-save {
+    background: #22c55e; /* 💚 verde principal */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(34, 197, 94, 0.25);
+
+    &:hover {
+      background: #16a34a; /* verde mais escuro */
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35);
+    }
+
+    &:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    i {
+      color: #fff;
+    }
+  }
+}
+
+.btn-subscribe {
+  background: linear-gradient(90deg, #2785c2, #1d6ea0);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(39, 133, 194, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background: linear-gradient(90deg, #1d6ea0, #2785c2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(39, 133, 194, 0.45);
+    color: #fff;
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(39, 133, 194, 0.2);
+    color: #fff;
+  }
+
+   &:focus {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(39, 133, 194, 0.2);
+    color: #fff !important;
+  }
+}
+
+.rounded-alert {
+  border-radius: 30px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeInScale 0.25s ease;
+}
+
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
